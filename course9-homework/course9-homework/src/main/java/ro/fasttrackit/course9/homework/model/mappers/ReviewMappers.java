@@ -7,17 +7,15 @@ import ro.fasttrackit.course9.homework.model.entity.ReviewEntity;
 import static java.util.Optional.ofNullable;
 
 public class ReviewMappers implements Mappers<ReviewDto, ReviewEntity> {
-    private final DbReviewMapper toDbMapper = new DbReviewMapper();
-    public final ReviewMapper toApiMapper = new ReviewMapper();
 
     @Override
     public ModelMapper<ReviewEntity, ReviewDto> toApiMapper() {
-        return toApiMapper;
+        return new ReviewMapper();
     }
 
     @Override
     public ModelMapper<ReviewDto, ReviewEntity> toDbMapper() {
-        return toDbMapper;
+        return new DbReviewMapper();
     }
 }
 

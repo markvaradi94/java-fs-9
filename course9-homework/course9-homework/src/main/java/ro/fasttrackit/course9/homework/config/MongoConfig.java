@@ -25,6 +25,7 @@ public class MongoConfig {
 
     @Value("${mongodb.encryptedUsername}")
     private String encryptedUsername;
+
     @Bean
     public StringEncryptor jasyptStringEncryptor() {
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();

@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  rooms:
+    image: markvaradi94/rooms-app:1.4
+    dns: 8.8.8.8
+    build: .
+    environment:
+        - JASYPT_ENCRYPTOR_PASSWORD=Linkinpark1403!
+        - MONGODB_ENCRYPTED_USERNAME=Li+ywplEmbDDaJO8H3GUGF0DPWLsW40nkbVjkqmuctLtradfXyIiaoVvLOGn0ryj
+        - MONGODB_ENCRYPTED_PASSWORD=swCPPWgTzh6tsiK177//QAl+9JeRBJaq8eHewN0ko0E4/pG4GC8TatTTzdlDmrS9+Bs+5x2lteUzm2sfqnOkRA==
+        - SPRING_DATA_MONGODB_URI:mongodb://events-admin:qTvx9i6Se9MpYiXQ@mongodb:27017/rooms?retryWrites=true&w=majority&authSource=admin
+    ports:
+      - "8080:8080"
+    container_name: rooms-app
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=events-admin
+      - MONGO_INITDB_ROOT_PASSWORD=qTvx9i6Se9MpYiXQ
+    volumes:
+      - /tmp/mongodata:/data/db
+    container_name: mongodb

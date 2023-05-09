@@ -3,7 +3,6 @@ package ro.fasttrackit.course9.homework.model.mappers;
 import java.util.List;
 
 import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 
 public interface ModelMapper<S, T> {
@@ -12,7 +11,7 @@ public interface ModelMapper<S, T> {
                 .map(nonNullSource ->
                         stream(nonNullSource.spliterator(), false)
                                 .map(this::of)
-                                .collect(toList()))
+                                .toList())
                 .orElse(null);
     }
 
