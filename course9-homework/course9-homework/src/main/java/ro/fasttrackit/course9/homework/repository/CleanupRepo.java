@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface CleanupRepo extends MongoRepository<CleanupEntity, String> {
     Optional<CleanupEntity> findByIdAndRoomId(String cleanupId, String roomId);
+
+    boolean existsByIdAndRoomId(String cleanupId, String roomId);
 }

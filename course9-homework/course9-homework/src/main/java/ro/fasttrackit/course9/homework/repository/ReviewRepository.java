@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import ro.fasttrackit.course9.homework.model.entity.ReviewEntity;
 import ro.fasttrackit.course9.homework.model.filters.ReviewFilters;
+import ro.fasttrackit.course9.homework.model.request.review.GetReviewsRequest;
 
 import java.util.Optional;
 
@@ -29,6 +30,13 @@ public class ReviewRepository {
         Query query = toQuery(filters).with(pagination);
         return getPage(mongo.find(query, ReviewEntity.class),
                 pagination,
+                () -> mongo.count(query.with(unpaged()), ReviewEntity.class));
+    }
+
+    public Page<ReviewEntity> findAll(GetReviewsRequest request) {
+        Query query = toQuery(request.filters()).with(request.pageable());
+        return getPage(mongo.find(query, ReviewEntity.class),
+                request.pageable(),
                 () -> mongo.count(query.with(unpaged()), ReviewEntity.class));
     }
 

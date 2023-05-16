@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ro.fasttrackit.course9.homework.exception.ValidationException;
 import ro.fasttrackit.course9.homework.model.entity.ReviewEntity;
+import ro.fasttrackit.course9.homework.model.request.review.AddReviewRequest;
+import ro.fasttrackit.course9.homework.operation.validator.OperationValidator;
+import ro.fasttrackit.course9.homework.operation.validator.Validator;
 import ro.fasttrackit.course9.homework.repository.ReviewRepo;
 import ro.fasttrackit.course9.homework.repository.RoomRepo;
 

@@ -7,8 +7,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+import ro.fasttrackit.course9.homework.model.entity.CleanupEntity;
 import ro.fasttrackit.course9.homework.model.entity.RoomEntity;
 import ro.fasttrackit.course9.homework.model.filters.RoomFilters;
+import ro.fasttrackit.course9.homework.model.request.cleanup.GetCleanupsRequest;
+import ro.fasttrackit.course9.homework.model.request.room.GetRoomsRequest;
 
 import java.util.Optional;
 
@@ -29,6 +32,13 @@ public class RoomRepository {
         Query query = toQuery(filters).with(pagination);
         return getPage(mongo.find(query, RoomEntity.class),
                 pagination,
+                () -> mongo.count(query.with(unpaged()), RoomEntity.class));
+    }
+
+    public Page<RoomEntity> findAll(GetRoomsRequest request) {
+        Query query = toQuery(request.filters()).with(request.pageable());
+        return getPage(mongo.find(query, RoomEntity.class),
+                request.pageable(),
                 () -> mongo.count(query.with(unpaged()), RoomEntity.class));
     }
 
