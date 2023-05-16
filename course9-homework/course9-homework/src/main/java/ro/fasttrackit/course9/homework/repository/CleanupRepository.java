@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import ro.fasttrackit.course9.homework.model.entity.CleanupEntity;
 import ro.fasttrackit.course9.homework.model.entity.RoomEntity;
 import ro.fasttrackit.course9.homework.model.filters.CleanupFilters;
+import ro.fasttrackit.course9.homework.model.request.cleanup.GetCleanupsRequest;
 
 import java.util.Optional;
 
@@ -30,6 +31,13 @@ public class CleanupRepository {
         Query query = toQuery(filters).with(pagination);
         return getPage(mongo.find(query, CleanupEntity.class),
                 pagination,
+                () -> mongo.count(query.with(unpaged()), RoomEntity.class));
+    }
+
+    public Page<CleanupEntity> findAll(GetCleanupsRequest request) {
+        Query query = toQuery(request.filters()).with(request.pageable());
+        return getPage(mongo.find(query, CleanupEntity.class),
+                request.pageable(),
                 () -> mongo.count(query.with(unpaged()), RoomEntity.class));
     }
 
@@ -67,5 +75,9 @@ public class CleanupRepository {
         Optional<CleanupEntity> cleanupOptional = findByCleanupIdAndRoomId(cleanupId, roomId);
         cleanupOptional.ifPresent(repo::delete);
         return cleanupOptional;
+    }
+
+    public boolean existsByCleanupIdAndRoomId(String cleanupId, String roomId) {
+        return repo.existsByIdAndRoomId(cleanupId, roomId);
     }
 }
