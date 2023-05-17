@@ -2,6 +2,7 @@ package ro.fasttrackit.course9.homework.service.operation.cleanup;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ro.fasttrackit.course9.homework.model.dto.CleanupDto;
 import ro.fasttrackit.course9.homework.model.entity.CleanupEntity;
 import ro.fasttrackit.course9.homework.model.mappers.CleanupMappers;
 import ro.fasttrackit.course9.homework.model.request.cleanup.AddCleanupRequest;
@@ -11,6 +12,8 @@ import ro.fasttrackit.course9.homework.repository.CleanupRepository;
 import ro.fasttrackit.course9.homework.service.operation.room.CheckRoomExistsOperation;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.Optional.ofNullable;
+import static java.util.UUID.randomUUID;
 
 
 @Component
@@ -23,7 +26,14 @@ public class AddCleanupOperation implements Operation<AddCleanupRequest, Cleanup
     @Override
     public CleanupEntity doExecute(AddCleanupRequest request) {
         var cleanup = request.cleanup();
-        return cleanupRepository.addCleanup(mappers.toDb((cleanup.withRoomId(request.roomId()))));
+        return cleanupRepository.addCleanup(mappers.toDb((addIdsToCleanup(request, cleanup))));
+    }
+
+    private CleanupDto addIdsToCleanup(AddCleanupRequest request, CleanupDto cleanup) {
+        return cleanup
+                .withRoomId(request.roomId())
+                .withId(ofNullable(request.roomId())
+                        .orElse(randomUUID().toString()));
     }
 
     @Override

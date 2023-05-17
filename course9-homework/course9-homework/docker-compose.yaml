@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   rooms:
-    image: markvaradi94/rooms-app:1.4
+    image: markvaradi94/rooms-app:1.5
     dns: 8.8.8.8
     build: .
     environment:

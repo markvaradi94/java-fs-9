@@ -2,6 +2,7 @@ package ro.fasttrackit.course9.homework.service.operation.review;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ro.fasttrackit.course9.homework.model.dto.ReviewDto;
 import ro.fasttrackit.course9.homework.model.entity.ReviewEntity;
 import ro.fasttrackit.course9.homework.model.mappers.ReviewMappers;
 import ro.fasttrackit.course9.homework.model.request.review.AddReviewRequest;
@@ -11,6 +12,8 @@ import ro.fasttrackit.course9.homework.repository.ReviewRepository;
 import ro.fasttrackit.course9.homework.service.operation.room.CheckRoomExistsOperation;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.Optional.ofNullable;
+import static java.util.UUID.randomUUID;
 
 @Component
 @RequiredArgsConstructor
@@ -22,7 +25,14 @@ public class AddReviewOperation implements Operation<AddReviewRequest, ReviewEnt
     @Override
     public ReviewEntity doExecute(AddReviewRequest request) {
         var review = request.review();
-        return repository.addReview(mappers.toDb(review.withRoomId(request.roomId())));
+        return repository.addReview(mappers.toDb(addIdsToReview(request, review)));
+    }
+
+    private ReviewDto addIdsToReview(AddReviewRequest request, ReviewDto review) {
+        return review
+                .withRoomId(request.roomId())
+                .withId(ofNullable(request.roomId())
+                        .orElse(randomUUID().toString()));
     }
 
     @Override

@@ -11,6 +11,8 @@ import ro.fasttrackit.course9.homework.repository.RoomRepo;
 import ro.fasttrackit.course9.homework.repository.RoomRepository;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.Optional.ofNullable;
+import static java.util.UUID.randomUUID;
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +23,12 @@ public class AddRoomOperation implements Operation<RoomDto, RoomEntity> {
 
     @Override
     public RoomEntity doExecute(RoomDto request) {
-        return repository.addRoom(mappers.toDb(request));
+        return repository.addRoom(mappers.toDb(addRoomId(request)));
+    }
+
+    private RoomDto addRoomId(RoomDto request) {
+        return request.withId(ofNullable(request.id())
+                .orElse(randomUUID().toString()));
     }
 
     @Override
